@@ -20,7 +20,7 @@ public class FeedbackRepository : IFeedbackRepository
 
     public async Task<Feedback?> GetAsync(int id)
     {
-        return await _DbContext.Feedbacks.FirstOrDefaultAsync(f => f.Id == id);
+        return await _DbContext.Feedbacks.FirstOrDefaultAsync(f => f.FeedbackId == id);
     }
     public async Task SaveChangesAsync()
     {

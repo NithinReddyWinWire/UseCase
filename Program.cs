@@ -25,13 +25,14 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
-    app.UseSwaggerUI(options =>
-{
-    options.SwaggerEndpoint("/openapi/v1.json", "My API v1");
-});
-    app.MapScalarApiReference(options =>
-    {
-        options.Theme = ScalarTheme.Moon;
+    
+    //Swagger
+    app.UseSwaggerUI(options =>{
+    options.SwaggerEndpoint("/openapi/v1.json", "My API v1");});
+    
+    //Scalar
+    app.MapScalarApiReference(options =>{
+        options.Theme = ScalarTheme.Mars;
     });
 }
 

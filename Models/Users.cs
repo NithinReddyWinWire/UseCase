@@ -2,17 +2,19 @@ namespace UseCase.Models;
 
 public class Users
 {
-    int UserId{get;set;}
-    string EmpID {get;set;}
+    public int UserId{get;set;}
+    public string EmpID {get;set;}
 
-    string name{get;set;}
+    public string Name{get;set;}
 
-    string email{get;set;}
+    public string Email{get;set;}
 
-    string password{get;set;}
+    public string Password{get;set;}
 
-    string role{get;set;}
+    public string Role{get;set;}
 
-    string DeptName{get;set;}
+   public string DeptName{get;set;}
+
+   public ICollection<Projects> ProjectName { get; set; }
     
 }

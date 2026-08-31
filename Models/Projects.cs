@@ -1,10 +1,13 @@
-public class Projects
-{
-    string ProjectId{get;set;}
+using UseCase.Models;
+    public class Projects
+    {
+        public int ProjectId{get;set;}
 
-    string ProjectCode{get;set;}
+        public string ProjectCode{get;set;}
 
-    string ProjectName{get;set;}
+        public string ProjectName{get;set;}
+
+        public ICollection<Users> UserName { get; set; }
 
 
-}
+    }

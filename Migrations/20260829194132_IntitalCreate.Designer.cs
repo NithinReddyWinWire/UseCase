@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using UseCase.Db;
 
@@ -11,9 +12,11 @@ using UseCase.Db;
 namespace UseCase.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260829194132_IntitalCreate")]
+    partial class IntitalCreate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -41,21 +44,6 @@ namespace UseCase.Migrations
                     b.HasKey("ProjectId");
 
                     b.ToTable("Projects");
-                });
-
-            modelBuilder.Entity("ProjectsUsers", b =>
-                {
-                    b.Property<int>("ProjectNameProjectId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("UserNameUserId")
-                        .HasColumnType("int");
-
-                    b.HasKey("ProjectNameProjectId", "UserNameUserId");
-
-                    b.HasIndex("UserNameUserId");
-
-                    b.ToTable("ProjectsUsers");
                 });
 
             modelBuilder.Entity("UseCase.Models.Feedback", b =>
@@ -150,21 +138,6 @@ namespace UseCase.Migrations
                     b.HasKey("UserId");
 
                     b.ToTable("Users");
-                });
-
-            modelBuilder.Entity("ProjectsUsers", b =>
-                {
-                    b.HasOne("Projects", null)
-                        .WithMany()
-                        .HasForeignKey("ProjectNameProjectId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("UseCase.Models.Users", null)
-                        .WithMany()
-                        .HasForeignKey("UserNameUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("UseCase.Models.Feedback", b =>
