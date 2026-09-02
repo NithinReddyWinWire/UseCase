@@ -1,8 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
-using UseCase.Models;
-using UseCase.Services;
+using WinReview.Models;
+using WinReview.Services;
 
-namespace UseCase.Controllers;
+namespace WinReview.Controllers;
 
 
 

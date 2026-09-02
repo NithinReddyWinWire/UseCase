@@ -1,10 +1,12 @@
-using UseCase.Models;
+using WinReview.Models;
+using WinReview.Dtos;
 
-namespace UseCase.Services;
+namespace WinReview.Services;
+
 
 
 public interface IFeedbackServices
 {
-    Task<Feedback> CreateFeedbackAsync(Feedback feedback);
+    Task<FeedbackDto> CreateFeedbackAsync(Feedback feedback);
     Task<Feedback?> GetFeedbackAsync(int id);
 }

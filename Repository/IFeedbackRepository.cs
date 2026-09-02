@@ -1,6 +1,6 @@
-using UseCase.Models;
+using WinReview.Models;
 
-namespace UseCase.Repository;
+namespace WinReview.Repository;
 
 public interface IFeedbackRepository
 {

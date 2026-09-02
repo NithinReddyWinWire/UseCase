@@ -1,4 +1,4 @@
-using UseCase.Models;
+using WinReview.Models;
     public class Projects
     {
         public int ProjectId{get;set;}
@@ -7,7 +7,6 @@ using UseCase.Models;
 
         public string ProjectName{get;set;}
 
-        public ICollection<Users> UserName { get; set; }
 
-
+        public List<ProjectMembers> Members {get;set;}
     }

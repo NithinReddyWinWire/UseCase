@@ -1,4 +1,6 @@
-namespace UseCase.Models;
+
+
+namespace WinReview.Models;
 
 public class Users
 {
@@ -11,10 +13,10 @@ public class Users
 
     public string Password{get;set;}
 
-    public string Role{get;set;}
+    public string? Role{get;set;}
 
-   public string DeptName{get;set;}
+   public string? DeptName{get;set;}
 
-   public ICollection<Projects> ProjectName { get; set; }
-    
+   public List<ProjectMembers> ? ProjectMemberships {get;set;}
+
 }

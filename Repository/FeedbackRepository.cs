@@ -1,7 +1,7 @@
-using UseCase.Db;
-using UseCase.Models;
+using WinReview.Db;
+using WinReview.Models;
 using Microsoft.EntityFrameworkCore;
-using UseCase.Repository;
+using WinReview.Repository;
 
 
 public class FeedbackRepository : IFeedbackRepository

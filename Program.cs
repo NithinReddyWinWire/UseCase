@@ -1,9 +1,9 @@
 using Scalar.AspNetCore;
 using Microsoft.EntityFrameworkCore;
-using UseCase.Db;
-using UseCase.Services;
-using UseCase.Repository;
-using Microsoft.AspNetCore.Connections;
+using WinReview.Db;
+using WinReview.Services;
+using WinReview.Repository;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,14 +13,20 @@ builder.Services.AddOpenApi(options =>
 {
     options.OpenApiVersion = Microsoft.OpenApi.OpenApiSpecVersion.OpenApi3_1;
 });
+   
+// sql
+builder.Services.AddDbContext<AppDbContext>(options=> options.
+UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
 
 builder.Services.AddScoped<IFeedbackServices,FeedbackService>();
-
+builder.Services.AddScoped<IUserServices,UserServices>();
 builder.Services.AddScoped<IFeedbackRepository,FeedbackRepository>();
+builder.Services.AddScoped<IUserRepository,UserRepository>();
 
-builder.Services.AddDbContext<AppDbContext>(options=> options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 var app = builder.Build();
+
 
 if (app.Environment.IsDevelopment())
 {

@@ -1,17 +1,24 @@
-using UseCase.Models;
-using UseCase.Db;
-using UseCase.Repository;
-using UseCase.Services;
+using WinReview.Models;
+using WinReview.Db;
+using WinReview.Repository;
+using WinReview.Services;
+using WinReview.Dtos;
 
 public class FeedbackService (IFeedbackRepository _feedbackRepositoy ): IFeedbackServices
 {
-    public async  Task<Feedback> CreateFeedbackAsync(Feedback feedback)
+    public async  Task<FeedbackDto> CreateFeedbackAsync(Feedback feedback)
     {
         feedback.CreatedAt = DateTime.Now;
-
         _feedbackRepositoy.AddAsync(feedback);
         await _feedbackRepositoy.SaveChangesAsync();
-        return feedback;
+        FeedbackDto dtoo = new FeedbackDto()
+        {
+            FeedbackId = feedback.FeedbackId,
+            Rating= feedback.Rating,
+            Comment = feedback.Comment,
+            CreatedAt=feedback.CreatedAt
+        };
+        return dtoo;
 
     }
 
