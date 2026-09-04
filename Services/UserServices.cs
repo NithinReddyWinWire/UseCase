@@ -3,9 +3,16 @@ using WinReview.Db;
 using WinReview.Repository;
 using WinReview.Services;
 using WinReview.Dtos;
+using Microsoft.AspNetCore.Mvc.ActionConstraints;
+using Microsoft.AspNetCore.Mvc;
+using WinReview.Services.JwtServices;
+using System.Text;
 
-public class UserServices (IUserRepository _userRepositoy ): IUserServices
+public class UserServices (IUserRepository _userRepositoy, AppDbContext _context, JwtServices _jwtService): IUserServices
 {
+
+
+
     public async  Task<UserSignUpDto> UserSigninAsync (Users User)
     {
 
@@ -26,5 +33,26 @@ public class UserServices (IUserRepository _userRepositoy ): IUserServices
 
     }
 
-    
+    public  string? UserLogin(UserLoginDto RequestUser)
+    {
+       var user = _context.Users.FirstOrDefault(u=> u.Name == RequestUser.Name);
+
+       if (user == null)
+        {
+             throw new Exception("USER NOT FOUND");
+        }
+
+       if (!BCrypt.Net.BCrypt.Verify(RequestUser.Password, user.Password))
+        {
+            return null;
+        }
+
+       var token = _jwtService.GenerateToken(
+        user.UserId.ToString(),
+        user.Name
+        );
+
+        return token;
+        
+    }
 }

@@ -9,5 +9,5 @@ namespace WinReview.Services;
 public interface IUserServices
 {
     Task<UserSignUpDto> UserSigninAsync(Users Users);
-
+    string? UserLogin(UserLoginDto Users);
 }

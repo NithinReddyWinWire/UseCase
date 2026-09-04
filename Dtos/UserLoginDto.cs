@@ -1,10 +1,10 @@
 namespace WinReview.Dtos;
-
-public class UserLoginDto
+using WinReview.Models;
+public class UserLoginDto 
 {
+    public int UserId { get; set; }
+    public string Name { get; set; }
 
-    public string Name{get;set;}
-
-    public string Password{get;set;}
+    public string Password { get; set; }
     
 }
