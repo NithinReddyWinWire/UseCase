@@ -14,6 +14,7 @@ public class FeedbackService (IFeedbackRepository _feedbackRepositoy ): IFeedbac
     }
 
     public async Task<ShowFeedbackDto?> GetFeedbackAsync(int id)
+
     {
         var FeedbackResponce =   await _feedbackRepositoy.GetAsync(id);
 
@@ -24,20 +25,35 @@ public class FeedbackService (IFeedbackRepository _feedbackRepositoy ): IFeedbac
 
         return new ShowFeedbackDto
         {
-        FeedbackId = FeedbackResponce.FeedbackId,
-        Rating = FeedbackResponce.Rating,
-        Comment = FeedbackResponce.Comment,
-        CreatedAt = FeedbackResponce.CreatedAt,
+            FeedbackId = FeedbackResponce.FeedbackId,
+            Rating = FeedbackResponce.Rating,
+            Comment = FeedbackResponce.Comment,
+            CreatedAt = FeedbackResponce.CreatedAt,
 
-        CategoryName = FeedbackResponce.Categories?.CategoryName,
+            CategoryName = FeedbackResponce.Categories?.CategoryName,
 
-        FeedbackByUserName = FeedbackResponce.FeedbackByUsersId?.Name,
+            FeedbackByUserName = FeedbackResponce.FeedbackByUsersId?.Name,
 
-        FeedbackToUserName = FeedbackResponce.FeedbackToUsersId?.Name,
+            FeedbackToUserName = FeedbackResponce.FeedbackToUsersId?.Name,
 
-        FeedbackStatus = FeedbackResponce.FeedbackStatus
+            FeedbackStatus = FeedbackResponce.FeedbackStatus
     };
 
         
     }
+
+    public async Task<bool> UpdateFeedbackAsync(int id, UpdateFeedbackDto dto)
+{
+    var feedback = await _feedbackRepositoy.GetAsync(id);
+
+    if (feedback == null)
+        return false;
+
+    feedback.Rating = dto.Rating;
+    feedback.Comment = dto.Comment;
+
+    await _feedbackRepositoy.UpdateAsync(feedback);
+
+    return true;
+}
 }

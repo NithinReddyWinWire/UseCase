@@ -45,10 +45,24 @@ public class FeedbackController (IFeedbackServices services) : ControllerBase
     
     [Authorize]
     [HttpGet("Show")]
-    // [Route("{id:int}")]
     public async Task<IActionResult> GetFeedbackById([FromQuery] int id )
     {
         var result = await services.GetFeedbackAsync(id);
         return Ok(result);
+    }
+
+    [Authorize]
+    [HttpPut("Update")]
+
+    public async Task<IActionResult> UpdateFeedback(int id, UpdateFeedbackDto dto)
+    {
+        var updated = await services.UpdateFeedbackAsync(id,dto);
+
+        if (!updated)
+        {
+            return NotFound("feedback not Found");
+        }
+
+        return Ok("feedback Updated Successfully");
     }
 }

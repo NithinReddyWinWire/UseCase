@@ -8,4 +8,6 @@ public interface IFeedbackRepository
 
     Task<Feedback?> GetAsync(int id);
     Task SaveChangesAsync();
+
+    Task UpdateAsync(Feedback feedback);
 }

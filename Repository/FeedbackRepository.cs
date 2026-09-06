@@ -32,4 +32,10 @@ public class FeedbackRepository : IFeedbackRepository
     {
         await _DbContext.SaveChangesAsync();
     }
+
+    public async Task UpdateAsync(Feedback feedback)
+    {
+        _DbContext.Feedbacks.Update(feedback);
+        await _DbContext.SaveChangesAsync();
+    }
 }

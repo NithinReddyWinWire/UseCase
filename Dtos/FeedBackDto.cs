@@ -23,3 +23,9 @@ public class ShowFeedbackDto
     public string? FeedbackToUserName { get; set; }
     public string? FeedbackStatus { get; set; }
 }
+
+public class UpdateFeedbackDto
+    {
+        public int Rating { get; set; }
+        public string Comment { get; set; }
+    }
