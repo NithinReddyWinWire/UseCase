@@ -6,24 +6,38 @@ using WinReview.Dtos;
 
 public class FeedbackService (IFeedbackRepository _feedbackRepositoy ): IFeedbackServices
 {
-    public async  Task<FeedbackDto> CreateFeedbackAsync(Feedback feedback)
+    public async Task CreateFeedbackAsync(Feedback feedback)
     {
-        feedback.CreatedAt = DateTime.Now;
-        _feedbackRepositoy.AddAsync(feedback);
+        
+        _feedbackRepositoy.Add(feedback);
         await _feedbackRepositoy.SaveChangesAsync();
-        FeedbackDto dtoo = new FeedbackDto()
-        {
-            FeedbackId = feedback.FeedbackId,
-            Rating= feedback.Rating,
-            Comment = feedback.Comment,
-            CreatedAt=feedback.CreatedAt
-        };
-        return dtoo;
-
     }
 
-    public async Task<Feedback?> GetFeedbackAsync(int id)
+    public async Task<ShowFeedbackDto?> GetFeedbackAsync(int id)
     {
-        return  await _feedbackRepositoy.GetAsync(id);
+        var FeedbackResponce =   await _feedbackRepositoy.GetAsync(id);
+
+        if(FeedbackResponce == null)
+        {
+            return null;
+        }
+
+        return new ShowFeedbackDto
+        {
+        FeedbackId = FeedbackResponce.FeedbackId,
+        Rating = FeedbackResponce.Rating,
+        Comment = FeedbackResponce.Comment,
+        CreatedAt = FeedbackResponce.CreatedAt,
+
+        CategoryName = FeedbackResponce.Categories?.CategoryName,
+
+        FeedbackByUserName = FeedbackResponce.FeedbackByUsersId?.Name,
+
+        FeedbackToUserName = FeedbackResponce.FeedbackToUsersId?.Name,
+
+        FeedbackStatus = FeedbackResponce.FeedbackStatus
+    };
+
+        
     }
 }

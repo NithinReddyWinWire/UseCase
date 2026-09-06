@@ -24,7 +24,7 @@ public class UserController (IUserServices services) : ControllerBase
         return Ok(result);
     }
 
-    [HttpPost("login")]
+    [HttpPost("Login")]
 
     public async Task<IActionResult> UserLogin(UserLoginDto user)
     {
@@ -33,7 +33,7 @@ public class UserController (IUserServices services) : ControllerBase
     }
 
     [Authorize]
-    [HttpGet("hello")]
+    [HttpGet("Hello User")]
     public IActionResult Hello()
     {
         var username = User.FindFirst(ClaimTypes.Name)?.Value;

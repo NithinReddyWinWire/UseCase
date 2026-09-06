@@ -1,5 +1,6 @@
-using WinReview.Models;
 using WinReview.Dtos;
+using WinReview.Models;
+
 
 namespace WinReview.Services;
 
@@ -7,6 +8,6 @@ namespace WinReview.Services;
 
 public interface IFeedbackServices
 {
-    Task<FeedbackDto> CreateFeedbackAsync(Feedback feedback);
-    Task<Feedback?> GetFeedbackAsync(int id);
+     Task CreateFeedbackAsync(Feedback feedback);
+    Task <ShowFeedbackDto?> GetFeedbackAsync(int id);
 }

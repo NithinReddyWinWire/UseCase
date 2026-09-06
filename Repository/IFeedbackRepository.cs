@@ -4,7 +4,7 @@ namespace WinReview.Repository;
 
 public interface IFeedbackRepository
 {
-    void AddAsync(Feedback feedback);
+    void Add(Feedback feedback);
 
     Task<Feedback?> GetAsync(int id);
     Task SaveChangesAsync();

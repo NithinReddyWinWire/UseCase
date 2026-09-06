@@ -13,14 +13,20 @@ public class FeedbackRepository : IFeedbackRepository
         _DbContext = DbContext;
     }
 
-    public void AddAsync(Feedback feedback)
+    public void Add(Feedback feedback)
     {
          _DbContext.Feedbacks.Add(feedback);
     }
 
     public async Task<Feedback?> GetAsync(int id)
     {
-        return await _DbContext.Feedbacks.FirstOrDefaultAsync(f => f.FeedbackId == id);
+        return await _DbContext.Feedbacks
+        .Include(f => f.Project)
+        .Include(f => f.Categories)
+        .Include(f => f.FeedbackByUsersId)
+        .Include(f => f.FeedbackToUsersId)
+        .Include(f => f.ApprovedByUserId)
+        .FirstOrDefaultAsync(f => f.FeedbackId == id);
     }
     public async Task SaveChangesAsync()
     {

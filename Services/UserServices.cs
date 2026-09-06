@@ -3,10 +3,8 @@ using WinReview.Db;
 using WinReview.Repository;
 using WinReview.Services;
 using WinReview.Dtos;
-using Microsoft.AspNetCore.Mvc.ActionConstraints;
-using Microsoft.AspNetCore.Mvc;
 using WinReview.Services.JwtServices;
-using System.Text;
+
 
 public class UserServices (IUserRepository _userRepositoy, AppDbContext _context, JwtServices _jwtService): IUserServices
 {

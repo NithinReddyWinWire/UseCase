@@ -20,14 +20,14 @@ public class AppDbContext : DbContext
     //efCore.dbContext has this method already and its set to procted.  
    protected override void OnModelCreating(ModelBuilder modelBuilder)
 {
-    // ===== Keys =====
+    // Keys 
     modelBuilder.Entity<Users>().HasKey(u => u.UserId);
     modelBuilder.Entity<Projects>().HasKey(p => p.ProjectId);
     modelBuilder.Entity<ReviewCategories>().HasKey(c => c.CategoryId);
     modelBuilder.Entity<Feedback>().HasKey(f => f.FeedbackId);
     modelBuilder.Entity<ProjectMembers>().HasKey(pm => new { pm.ProjectId, pm.UserId }); // composite key
  
-    // ===== ProjectMembers relations =====
+    //  ProjectMembers relations 
     modelBuilder.Entity<ProjectMembers>()
         .HasOne(pm => pm.Project)
         .WithMany(p => p.Members)
@@ -40,7 +40,7 @@ public class AppDbContext : DbContext
         .HasForeignKey(pm => pm.UserId)
         .OnDelete(DeleteBehavior.Restrict); // don't cascade-delete memberships if a user is deleted
  
-    // ===== Feedback relations =====
+    // Feedback relations 
     modelBuilder.Entity<Feedback>()
         .HasOne(f => f.Project)
         .WithMany()
@@ -86,7 +86,7 @@ public class AppDbContext : DbContext
     modelBuilder.Entity<Projects>().HasIndex(p => p.ProjectName); // autocomplete search
     modelBuilder.Entity<Users>().HasIndex(u => u.Name); // autocomplete search
  
-    // ===== Check constraints =====
+    // Check constraints 
     modelBuilder.Entity<Feedback>().ToTable(t => t.HasCheckConstraint(
         "CK_Feedback_Rating", "[Rating] >= 1 AND [Rating] <= 5"));
  
@@ -96,7 +96,7 @@ public class AppDbContext : DbContext
     modelBuilder.Entity<Feedback>().ToTable(t => t.HasCheckConstraint(
         "CK_Feedback_NoSelfReview", "[FeedbackByUser] <> [FeedbackToUser]"));
  
-    // ===== Seed the lookup table =====
+    // Seed the lookup table 
     modelBuilder.Entity<ReviewCategories>().HasData(
         new ReviewCategories { CategoryId = 1, CategoryName = "Project",   RequiresProject = true },
         new ReviewCategories { CategoryId = 2, CategoryName = "Yearly",    RequiresProject = false },
