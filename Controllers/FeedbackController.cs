@@ -45,18 +45,18 @@ public class FeedbackController (IFeedbackServices services) : ControllerBase
     
     [Authorize]
     [HttpGet("Show")]
-    public async Task<IActionResult> GetFeedbackById([FromQuery] int id )
+    public async Task<IActionResult> GetFeedbackById([FromQuery] int id, CancellationToken Ct )
     {
-        var result = await services.GetFeedbackAsync(id);
+        var result = await services.GetFeedbackAsync(id, Ct);
         return Ok(result);
     }
 
     [Authorize]
     [HttpPut("Update")]
 
-    public async Task<IActionResult> UpdateFeedback(int id, UpdateFeedbackDto dto)
+    public async Task<IActionResult> UpdateFeedback(int id, UpdateFeedbackDto dto,CancellationToken Ct)
     {
-        var updated = await services.UpdateFeedbackAsync(id,dto);
+        var updated = await services.UpdateFeedbackAsync(id,dto,Ct);
 
         if (!updated)
         {
@@ -65,4 +65,14 @@ public class FeedbackController (IFeedbackServices services) : ControllerBase
 
         return Ok("feedback Updated Successfully");
     }
+
+    [Authorize]
+    [HttpDelete("Delete")]
+     public async Task<IActionResult> DeleteFeedback(int id,CancellationToken Ct)
+    {
+        var result = await services.DeleteFeedbackAsync(id,Ct);
+
+        return Ok(result);
+    }
+
 }

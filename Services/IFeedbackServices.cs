@@ -9,6 +9,9 @@ namespace WinReview.Services;
 public interface IFeedbackServices
 {
      Task CreateFeedbackAsync(Feedback feedback);
-    Task <ShowFeedbackDto?> GetFeedbackAsync(int id);
-    Task<bool> UpdateFeedbackAsync(int id, UpdateFeedbackDto dto);
+    Task <ShowFeedbackDto?> GetFeedbackAsync(int id,CancellationToken Ct);
+    Task<bool> UpdateFeedbackAsync(int id, UpdateFeedbackDto dto,CancellationToken Ct);
+
+    Task<string> DeleteFeedbackAsync(int id,CancellationToken Ct);
+
 }

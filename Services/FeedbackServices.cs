@@ -13,10 +13,10 @@ public class FeedbackService (IFeedbackRepository _feedbackRepositoy ): IFeedbac
         await _feedbackRepositoy.SaveChangesAsync();
     }
 
-    public async Task<ShowFeedbackDto?> GetFeedbackAsync(int id)
+    public async Task<ShowFeedbackDto?> GetFeedbackAsync(int id,CancellationToken Ct)
 
     {
-        var FeedbackResponce =   await _feedbackRepositoy.GetAsync(id);
+        var FeedbackResponce =   await _feedbackRepositoy.GetAsync(id,Ct);
 
         if(FeedbackResponce == null)
         {
@@ -42,9 +42,9 @@ public class FeedbackService (IFeedbackRepository _feedbackRepositoy ): IFeedbac
         
     }
 
-    public async Task<bool> UpdateFeedbackAsync(int id, UpdateFeedbackDto dto)
+    public async Task<bool> UpdateFeedbackAsync(int id, UpdateFeedbackDto dto,CancellationToken Ct)
 {
-    var feedback = await _feedbackRepositoy.GetAsync(id);
+    var feedback = await _feedbackRepositoy.GetAsync(id,Ct);
 
     if (feedback == null)
         return false;
@@ -56,4 +56,21 @@ public class FeedbackService (IFeedbackRepository _feedbackRepositoy ): IFeedbac
 
     return true;
 }
+
+    public async Task<string> DeleteFeedbackAsync(int id,CancellationToken Ct)
+    {
+        var feedback = await _feedbackRepositoy.GetAsync(id,Ct);
+
+        if(feedback == null)
+        {
+            return "Feedback Not Found";
+        }
+
+        _feedbackRepositoy.Delete(feedback);
+
+        await _feedbackRepositoy.SaveChangesAsync();
+
+        return "Deleted Successfully";
+    }
+
 }

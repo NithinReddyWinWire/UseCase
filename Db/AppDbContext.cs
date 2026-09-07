@@ -71,20 +71,13 @@ public class AppDbContext : DbContext
         .HasForeignKey(f => f.ApprovedByUser)
         .OnDelete(DeleteBehavior.Restrict);
  
-    // ===== Defaults =====
+    //To set Default Value of FeedbackStatus
     modelBuilder.Entity<Feedback>().Property(f => f.FeedbackStatus).HasDefaultValue("Pending");
- 
-    // ===== Uniqueness =====
+
+    //Uniques fields
     modelBuilder.Entity<Users>().HasIndex(u => u.Email).IsUnique();
     modelBuilder.Entity<Users>().HasIndex(u => u.EmpID).IsUnique();
     modelBuilder.Entity<ReviewCategories>().HasIndex(c => c.CategoryName).IsUnique();
- 
-    // ===== Performance indexes (match your actual query patterns) =====
-    modelBuilder.Entity<Feedback>().HasIndex(f => new { f.FeedbackToUser, f.FeedbackStatus }); // reviewee's "my feedback" view
-    modelBuilder.Entity<Feedback>().HasIndex(f => f.FeedbackStatus); // admin queue
-    modelBuilder.Entity<Feedback>().HasIndex(f => f.ProjectId);
-    modelBuilder.Entity<Projects>().HasIndex(p => p.ProjectName); // autocomplete search
-    modelBuilder.Entity<Users>().HasIndex(u => u.Name); // autocomplete search
  
     // Check constraints 
     modelBuilder.Entity<Feedback>().ToTable(t => t.HasCheckConstraint(

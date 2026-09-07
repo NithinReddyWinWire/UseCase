@@ -18,7 +18,7 @@ public class FeedbackRepository : IFeedbackRepository
          _DbContext.Feedbacks.Add(feedback);
     }
 
-    public async Task<Feedback?> GetAsync(int id)
+    public async Task<Feedback?> GetAsync(int id,CancellationToken Ct)
     {
         return await _DbContext.Feedbacks
         .Include(f => f.Project)
@@ -26,11 +26,7 @@ public class FeedbackRepository : IFeedbackRepository
         .Include(f => f.FeedbackByUsersId)
         .Include(f => f.FeedbackToUsersId)
         .Include(f => f.ApprovedByUserId)
-        .FirstOrDefaultAsync(f => f.FeedbackId == id);
-    }
-    public async Task SaveChangesAsync()
-    {
-        await _DbContext.SaveChangesAsync();
+        .FirstOrDefaultAsync(f => f.FeedbackId == id,Ct);
     }
 
     public async Task UpdateAsync(Feedback feedback)
@@ -38,4 +34,17 @@ public class FeedbackRepository : IFeedbackRepository
         _DbContext.Feedbacks.Update(feedback);
         await _DbContext.SaveChangesAsync();
     }
+
+    public void Delete(Feedback feedback)
+    {
+        _DbContext.Feedbacks.Remove(feedback);
+    }
+
+    public async Task SaveChangesAsync()
+    {
+        await _DbContext.SaveChangesAsync();
+    }
+
+
+
 }

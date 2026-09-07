@@ -16,16 +16,23 @@ namespace WinReview.Controllers;
 public class UserController (IUserServices services) : ControllerBase
 {
 
-    [HttpPost]
-    public async Task<IActionResult> UserSignin(Users user)
+    [HttpPost("SignIn")]
+    public async Task<IActionResult> UserSignin(UserSignUpDto user)
     {
-    
-        var result = await services.UserSigninAsync(user);
+        var User = new Users
+        {
+            EmpID = user.EmpID,
+            Name = user.Name,
+            Email = user.Email,
+            Password = user.Password
+        };
+
+        var result = await services.UserSigninAsync(User);
         return Ok(result);
     }
 
-    [HttpPost("Login")]
 
+    [HttpPost("Login")]
     public async Task<IActionResult> UserLogin(UserLoginDto user)
     {
         var result = services.UserLogin(user);
