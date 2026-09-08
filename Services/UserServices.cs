@@ -6,6 +6,7 @@ using WinReview.Dtos;
 using WinReview.Services.JwtServices;
 
 
+
 public class UserServices (IUserRepository _userRepositoy, AppDbContext _context, JwtServices _jwtService): IUserServices
 {
 
@@ -37,12 +38,12 @@ public class UserServices (IUserRepository _userRepositoy, AppDbContext _context
 
        if (user == null)
         {
-             throw new Exception("USER NOT FOUND");
+            throw new KeyNotFoundException("Invalid User or Password");
         }
 
        if (!BCrypt.Net.BCrypt.Verify(RequestUser.Password, user.Password))
         {
-            return null;
+            throw new KeyNotFoundException("Invalid User or Password");
         }
 
        var token = _jwtService.GenerateToken(

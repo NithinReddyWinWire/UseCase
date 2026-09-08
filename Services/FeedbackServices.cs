@@ -20,7 +20,7 @@ public class FeedbackService (IFeedbackRepository _feedbackRepositoy ): IFeedbac
 
         if(FeedbackResponce == null)
         {
-            return null;
+            throw new KeyNotFoundException("feedback does not exist");
         }
 
         return new ShowFeedbackDto
@@ -42,12 +42,29 @@ public class FeedbackService (IFeedbackRepository _feedbackRepositoy ): IFeedbac
         
     }
 
+
+   public async Task<List<ShowMyFeedbackDto>> GetFeedbackForUserAsync(int userId, CancellationToken ct)
+    {
+        var feedbacks = await _feedbackRepositoy.GetFeedbackForUserAsync(userId, ct);
+
+        return feedbacks.Select(f => new ShowMyFeedbackDto
+            {
+                Rating = f.Rating,
+                Comment = f.Comment,
+                CreatedAt = f.CreatedAt,
+                CategoryName = f.Categories?.CategoryName,
+                FeedbackByUserName = f.FeedbackByUsersId?.Name
+            }).ToList();
+    }
+
     public async Task<bool> UpdateFeedbackAsync(int id, UpdateFeedbackDto dto,CancellationToken Ct)
 {
     var feedback = await _feedbackRepositoy.GetAsync(id,Ct);
 
     if (feedback == null)
-        return false;
+        {
+            throw new KeyNotFoundException("Feedback does not exist");
+        }
 
     feedback.Rating = dto.Rating;
     feedback.Comment = dto.Comment;
@@ -63,7 +80,7 @@ public class FeedbackService (IFeedbackRepository _feedbackRepositoy ): IFeedbac
 
         if(feedback == null)
         {
-            return "Feedback Not Found";
+            throw new KeyNotFoundException("Feedback not found");
         }
 
         _feedbackRepositoy.Delete(feedback);

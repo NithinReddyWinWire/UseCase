@@ -51,6 +51,24 @@ public class FeedbackController (IFeedbackServices services) : ControllerBase
         return Ok(result);
     }
 
+
+    [Authorize]
+    [HttpGet("my-feedback")]
+    public async Task<IActionResult> GetMyFeedback(CancellationToken ct)
+        {
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            if (userId == null)
+            {
+                return Unauthorized();
+            }
+
+            var result = await services.GetFeedbackForUserAsync(int.Parse(userId), ct);
+
+            return Ok(result);
+        }
+
+
     [Authorize]
     [HttpPut("Update")]
 

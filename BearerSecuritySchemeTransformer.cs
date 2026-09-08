@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.OpenApi;
 using Microsoft.OpenApi;
-using Microsoft.OpenApi;
+
 
 public class BearerSecuritySchemeTransformer : IOpenApiDocumentTransformer
 {

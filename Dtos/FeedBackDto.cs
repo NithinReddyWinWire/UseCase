@@ -17,13 +17,22 @@ public class ShowFeedbackDto
     public int Rating { get; set; }
     public string Comment { get; set; }
     public DateTime CreatedAt { get; set; }
-
     public string? CategoryName { get; set; }
     public string? FeedbackByUserName { get; set; }
     public string? FeedbackToUserName { get; set; }
     public string? FeedbackStatus { get; set; }
 }
 
+
+public class ShowMyFeedbackDto
+{
+    public int Rating { get; set; }
+    public string Comment { get; set; }
+    public DateTime CreatedAt { get; set; }
+    public string? CategoryName { get; set; }
+    public string? FeedbackByUserName { get; set; }
+
+}
 public class UpdateFeedbackDto
     {
         public int Rating { get; set; }

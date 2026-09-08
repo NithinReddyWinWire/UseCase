@@ -8,11 +8,23 @@ public class FeedbackRepository : IFeedbackRepository
 {
     private readonly AppDbContext _DbContext;
 
-   public FeedbackRepository(AppDbContext DbContext)
+    public FeedbackRepository(AppDbContext DbContext)
     {
         _DbContext = DbContext;
     }
 
+
+    public async Task<List<Feedback>> GetFeedbackForUserAsync(int userId,CancellationToken ct)
+    {
+        return await _DbContext.Feedbacks
+            .Include(f => f.Project)
+            .Include(f => f.Categories)
+            .Include(f => f.FeedbackByUsersId)
+            .Include(f => f.FeedbackToUsersId)
+            .Include(f => f.ApprovedByUserId)
+            .Where(f => f.FeedbackToUser == userId)
+            .ToListAsync(ct);
+    }
     public void Add(Feedback feedback)
     {
          _DbContext.Feedbacks.Add(feedback);

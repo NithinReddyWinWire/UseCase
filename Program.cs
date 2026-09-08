@@ -7,9 +7,12 @@ using WinReview.Services.JwtServices;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using WinReview.Middleware;
 
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddProblemDetails();
 
 builder.Services.AddControllers();
 
@@ -74,6 +77,8 @@ if (app.Environment.IsDevelopment())
         options.Theme = ScalarTheme.Mars;
     });
 }
+
+app.UseMiddleware<ExceptionHandlingMiddleware>();
 
 app.UseAuthentication();
 app.UseAuthorization();
