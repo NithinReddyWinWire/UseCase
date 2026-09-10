@@ -51,12 +51,7 @@ public class ExceptionHandlingMiddleware
                         response.Message = exception.Message;
                         break;
 
-                    case InvalidOperationException:
-
-                        response.StatusCode = (int) HttpStatusCode.Conflict;
-                        response.Message = exception.Message;
-                        break;
-           
+                    
                     default:
 
                         response.StatusCode = (int) HttpStatusCode.InternalServerError;

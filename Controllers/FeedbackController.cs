@@ -53,7 +53,7 @@ public class FeedbackController (IFeedbackServices services) : ControllerBase
 
 
     [Authorize]
-    [HttpGet("my-feedback")]
+    [HttpGet("My-Feedback")]
     public async Task<IActionResult> GetMyFeedback(CancellationToken ct)
         {
             var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
@@ -67,6 +67,23 @@ public class FeedbackController (IFeedbackServices services) : ControllerBase
 
             return Ok(result);
         }
+
+    [Authorize(Roles = "Admin")]
+    [HttpPut("Approve-Feedback")]
+    public async Task<IActionResult> ApproveFeedback(int id , CancellationToken ct)
+    {
+        var adminID = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        var role = User.FindFirst(ClaimTypes.Role)?.Value;
+        
+        if(adminID == null)
+            {
+                throw new KeyNotFoundException("User not found");
+            } 
+
+        var result = await services.ApproveFeedback(id,int.Parse(adminID),ct);
+
+        return Ok(result);
+    }
 
 
     [Authorize]

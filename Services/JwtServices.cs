@@ -14,12 +14,13 @@ public class JwtServices
         _configuration = configuration;
     }
 
-    public string GenerateToken(string userId, string username)
+    public string GenerateToken(string userId, string username, string role)
     {
         var claims = new[]
         {
             new Claim(ClaimTypes.NameIdentifier, userId.ToString() ),
-            new Claim(ClaimTypes.Name, username)
+            new Claim(ClaimTypes.Name, username),
+            new Claim(ClaimTypes.Role, role)
         };
 
         var key = new SymmetricSecurityKey(

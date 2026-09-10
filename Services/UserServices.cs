@@ -48,7 +48,8 @@ public class UserServices (IUserRepository _userRepositoy, AppDbContext _context
 
        var token = _jwtService.GenerateToken(
         user.UserId.ToString(),
-        user.Name
+        user.Name,
+        user.Role
         );
 
         return token;

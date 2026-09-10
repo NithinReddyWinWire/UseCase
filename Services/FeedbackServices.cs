@@ -47,6 +47,11 @@ public class FeedbackService (IFeedbackRepository _feedbackRepositoy ): IFeedbac
     {
         var feedbacks = await _feedbackRepositoy.GetFeedbackForUserAsync(userId, ct);
 
+        if(feedbacks == null)
+        {
+            throw new KeyNotFoundException("feedback does not exist");
+        }
+
         return feedbacks.Select(f => new ShowMyFeedbackDto
             {
                 Rating = f.Rating,
@@ -74,6 +79,7 @@ public class FeedbackService (IFeedbackRepository _feedbackRepositoy ): IFeedbac
     return true;
 }
 
+
     public async Task<string> DeleteFeedbackAsync(int id,CancellationToken Ct)
     {
         var feedback = await _feedbackRepositoy.GetAsync(id,Ct);
@@ -90,4 +96,21 @@ public class FeedbackService (IFeedbackRepository _feedbackRepositoy ): IFeedbac
         return "Deleted Successfully";
     }
 
+    public async Task<string> ApproveFeedback(int feedbackId,int adminId,CancellationToken ct)
+    {
+        var feedback = await _feedbackRepositoy.GetAsync(feedbackId, ct);
+
+        if (feedback == null)
+        {
+            throw new KeyNotFoundException("Feedback Not Found. Cannot Be approved!");
+        }
+
+        feedback.FeedbackStatus = "Approved";
+        feedback.ApprovedByUser = adminId;
+        feedback.ReviewdAt = DateTime.Now;
+
+        await _feedbackRepositoy.UpdateAsync(feedback);
+
+        return "Feedback approved successfully";
+    }
 }

@@ -14,4 +14,5 @@ public interface IFeedbackServices
     Task<List<ShowMyFeedbackDto>> GetFeedbackForUserAsync(int userId, CancellationToken ct);
     Task<string> DeleteFeedbackAsync(int id,CancellationToken Ct);
 
+    Task<string> ApproveFeedback(int feedbackId,int adminId,CancellationToken ct);
 }

@@ -71,7 +71,6 @@ public class AppDbContext : DbContext
         .HasForeignKey(f => f.ApprovedByUser)
         .OnDelete(DeleteBehavior.Restrict);
  
-    //To set Default Value of FeedbackStatus
     modelBuilder.Entity<Feedback>().Property(f => f.FeedbackStatus).HasDefaultValue("Pending");
 
     //Uniques fields
@@ -89,7 +88,7 @@ public class AppDbContext : DbContext
     modelBuilder.Entity<Feedback>().ToTable(t => t.HasCheckConstraint(
         "CK_Feedback_NoSelfReview", "[FeedbackByUser] <> [FeedbackToUser]"));
  
-    // Seed the lookup table 
+    // Seeding the lookup table 
     modelBuilder.Entity<ReviewCategories>().HasData(
         new ReviewCategories { CategoryId = 1, CategoryName = "Project",   RequiresProject = true },
         new ReviewCategories { CategoryId = 2, CategoryName = "Yearly",    RequiresProject = false },
