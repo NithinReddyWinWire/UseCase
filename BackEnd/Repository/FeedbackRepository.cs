@@ -14,6 +14,10 @@ public class FeedbackRepository : IFeedbackRepository
     }
 
 
+    public void Add(Feedback feedback)
+    {
+         _DbContext.Feedbacks.Add(feedback);
+    }
     public async Task<List<Feedback>> GetFeedbackForUserAsync(int userId,CancellationToken ct)
     {
         return await _DbContext.Feedbacks
@@ -25,11 +29,6 @@ public class FeedbackRepository : IFeedbackRepository
             .Where(f => f.FeedbackToUser == userId)
             .ToListAsync(ct);
     }
-    public void Add(Feedback feedback)
-    {
-         _DbContext.Feedbacks.Add(feedback);
-    }
-
     public async Task<Feedback?> GetAsync(int id,CancellationToken Ct)
     {
         return await _DbContext.Feedbacks

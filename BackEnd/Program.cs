@@ -72,10 +72,6 @@ if (app.Environment.IsDevelopment())
     
     });
     
-    //Scalar
-    app.MapScalarApiReference(options =>{
-        options.Theme = ScalarTheme.Mars;
-    });
 }
 
 app.UseMiddleware<ExceptionHandlingMiddleware>();
