@@ -40,12 +40,28 @@ public class UserController (IUserServices services) : ControllerBase
     }
 
     [Authorize]
-    [HttpGet("Hello User")]
+    [HttpGet("Hello-User")]
     public IActionResult Hello()
     {
         var username = User.FindFirst(ClaimTypes.Name)?.Value;
 
         return Ok(new {message = $"hello {username}"});
+    }
+
+    [HttpGet("Search-Users")]
+    public async Task<IActionResult> SearchUsers(String? search)
+    {
+        var users = await services.SearchUsersAsync(search);
+
+        var result = users.Select(u => new UserSearchDto
+        {
+            UserId = u.UserId,
+            EmpID = u.EmpID,
+            Name = u.Name,
+            Email = u.Email
+        });
+
+        return Ok(result);
     }
 
 }

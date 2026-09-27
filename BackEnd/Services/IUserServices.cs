@@ -10,4 +10,6 @@ public interface IUserServices
 {
     Task<UserSignUpDto> UserSigninAsync(Users Users);
     string? UserLogin(UserLoginDto Users);
+
+    Task<List<Users>> SearchUsersAsync(string? search);
 }

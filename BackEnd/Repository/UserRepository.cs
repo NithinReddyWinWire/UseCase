@@ -22,4 +22,22 @@ public class UserRepository : IUserRepository
     {
         await _DbContext.SaveChangesAsync();
     }
+
+
+     public async Task<List<Users>> SearchUsersAsync(string? search)
+    {
+        var query = _DbContext.Users.AsQueryable();
+
+        if (!string.IsNullOrWhiteSpace(search))
+        {
+            query = query.Where(u =>
+                u.Name.Contains(search) ||
+                u.EmpID.Contains(search) ||
+                u.Email.Contains(search));
+        }
+
+        return await query
+            .Take(10)
+            .ToListAsync();
+    }
 }

@@ -55,4 +55,10 @@ public class UserServices (IUserRepository _userRepositoy, AppDbContext _context
         return token;
         
     }
+
+
+    public async Task<List<Users>> SearchUsersAsync(string? search)
+    {
+        return await _userRepositoy.SearchUsersAsync(search);
+    }
 }
