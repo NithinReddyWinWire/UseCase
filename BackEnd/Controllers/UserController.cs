@@ -16,28 +16,58 @@ namespace WinReview.Controllers;
 public class UserController (IUserServices services) : ControllerBase
 {
 
-    [HttpPost("SignIn")]
-    public async Task<IActionResult> UserSignin(UserSignUpDto user)
+    [Authorize]
+    [HttpGet("claims")]
+    public IActionResult GetClaims()
     {
-        var User = new Users
+        var claims = User.Claims.Select(c => new
         {
-            EmpID = user.EmpID,
-            Name = user.Name,
-            Email = user.Email,
-            Password = user.Password
-        };
+            c.Type,
+            c.Value
+        });
 
-        var result = await services.UserSigninAsync(User);
+        return Ok(claims);
+    }
+
+    [Authorize]
+    [HttpPost("Sync")]
+    public async Task<IActionResult> SyncUser()
+    {
+        var objectId = User.FindFirst(
+            "http://schemas.microsoft.com/identity/claims/objectidentifier"
+        )?.Value;
+
+        var name = User.FindFirst("name")?.Value;
+
+        var email = User.FindFirst(
+            "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/upn"
+        )?.Value;
+
+        var role = User.FindFirst(
+            "http://schemas.microsoft.com/ws/2008/06/identity/claims/role"
+        )?.Value;
+
+        if (string.IsNullOrWhiteSpace(objectId))
+        {
+            return Unauthorized();
+        }
+
+        if (string.IsNullOrWhiteSpace(name) ||
+            string.IsNullOrWhiteSpace(email))
+        {
+            return BadRequest("Required user claims are missing.");
+        }
+
+        var result = await services.SyncUserAsync(
+            objectId,
+            name,
+            email,
+            role
+        );
+
         return Ok(result);
     }
 
-
-    [HttpPost("Login")]
-    public async Task<IActionResult> UserLogin(UserLoginDto user)
-    {
-        var result = services.UserLogin(user);
-        return Ok(new { result });
-    }
 
 
     [HttpGet("Hello-User")]
@@ -48,6 +78,8 @@ public class UserController (IUserServices services) : ControllerBase
         return Ok(new {message = $"hello {username}"});
     }
 
+    
+
 
     [HttpGet("Search-Users")]
     public async Task<IActionResult> SearchUsers(String? search)
@@ -57,7 +89,6 @@ public class UserController (IUserServices services) : ControllerBase
         var result = users.Select(u => new UserSearchDto
         {
             UserId = u.UserId,
-            EmpID = u.EmpID,
             Name = u.Name,
             Email = u.Email
         });

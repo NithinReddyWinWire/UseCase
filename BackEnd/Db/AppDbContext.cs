@@ -75,7 +75,7 @@ public class AppDbContext : DbContext
 
     //Uniques fields
     modelBuilder.Entity<Users>().HasIndex(u => u.Email).IsUnique();
-    modelBuilder.Entity<Users>().HasIndex(u => u.EmpID).IsUnique();
+    modelBuilder.Entity<Users>().HasIndex(u => u.MicrosoftObjectId).IsUnique();
     modelBuilder.Entity<ReviewCategories>().HasIndex(c => c.CategoryName).IsUnique();
  
     // Check constraints 

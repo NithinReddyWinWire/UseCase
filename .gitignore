@@ -7,3 +7,5 @@ obj/
 **/appsettings.json
 **/appsettings.Development.json
 **/authConfig.ts
+**/AuthTestPage.tsx
+**/Login.tsx

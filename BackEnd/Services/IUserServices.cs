@@ -8,8 +8,7 @@ namespace WinReview.Services;
 
 public interface IUserServices
 {
-    Task<UserSignUpDto> UserSigninAsync(Users Users);
-    string? UserLogin(UserLoginDto Users);
 
+    Task<Users> SyncUserAsync(string objectId,string name,string email,string? role);
     Task<List<Users>> SearchUsersAsync(string? search);
 }

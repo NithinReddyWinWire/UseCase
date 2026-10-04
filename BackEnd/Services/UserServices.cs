@@ -7,56 +7,18 @@ using WinReview.Services.JwtServices;
 
 
 
-public class UserServices (IUserRepository _userRepositoy, AppDbContext _context, JwtServices _jwtService): IUserServices
+public class UserServices (IUserRepository _userRepositoy): IUserServices
 {
 
-
-
-    public async  Task<UserSignUpDto> UserSigninAsync (Users User)
+    public async Task<Users> SyncUserAsync(string objectId,string name,string email,string? role)
     {
-
-        string hashPassword = BCrypt.Net.BCrypt.HashPassword(User.Password);
-        User.Password = hashPassword;
-        _userRepositoy.AddUserAsync(User);
-        await _userRepositoy.SaveChangesAsync();
-
-         UserSignUpDto dtoo = new UserSignUpDto()
-        {
-            EmpID = User.EmpID,
-            Name= User.Name,
-            Email = User.Email,
-            Password=hashPassword
-        };
-
-        return dtoo;
-
-    }
-
-    public  string? UserLogin(UserLoginDto RequestUser)
-    {
-       var user = _context.Users.FirstOrDefault(u=> u.Name == RequestUser.Name);
-
-       if (user == null)
-        {
-            throw new KeyNotFoundException("Invalid User or Password");
-        }
-
-       if (!BCrypt.Net.BCrypt.Verify(RequestUser.Password, user.Password))
-        {
-            throw new KeyNotFoundException("Invalid User or Password");
-        }
-
-       var token = _jwtService.GenerateToken(
-        user.UserId.ToString(),
-        user.Name,
-        user.Role
+        return await _userRepositoy.SyncUserAsync(
+            objectId,
+            name,
+            email,
+            role
         );
-
-        return token;
-        
     }
-
-
     public async Task<List<Users>> SearchUsersAsync(string? search)
     {
         return await _userRepositoy.SearchUsersAsync(search);

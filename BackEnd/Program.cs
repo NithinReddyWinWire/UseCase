@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using WinReview.Middleware;
+using Microsoft.Identity.Web;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -27,27 +28,9 @@ builder.Services.AddOpenApi(options =>
 builder.Services.AddDbContext<AppDbContext>(options=> options.
 UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-
-//authenticatoin with jwt
+//Authentication with microsoft
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-    .AddJwtBearer(options =>
-    {
-        options.TokenValidationParameters = new TokenValidationParameters
-        {
-            ValidateIssuerSigningKey = true,
-
-            IssuerSigningKey = new SymmetricSecurityKey(
-                Encoding.UTF8.GetBytes(
-                    builder.Configuration["Jwt:Key"]!
-                )
-            ),
-
-            ValidateIssuer = false,
-            ValidateAudience = false,
-            ValidateLifetime = true
-        };
-    });
-
+    .AddMicrosoftIdentityWebApi(builder.Configuration.GetSection("AzureAd"));
 
 //For role based authorization 
 
