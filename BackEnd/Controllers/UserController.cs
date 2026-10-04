@@ -39,7 +39,7 @@ public class UserController (IUserServices services) : ControllerBase
         return Ok(new { result });
     }
 
-    [Authorize]
+
     [HttpGet("Hello-User")]
     public IActionResult Hello()
     {
@@ -47,6 +47,7 @@ public class UserController (IUserServices services) : ControllerBase
 
         return Ok(new {message = $"hello {username}"});
     }
+
 
     [HttpGet("Search-Users")]
     public async Task<IActionResult> SearchUsers(String? search)

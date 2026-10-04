@@ -8,13 +8,12 @@ using WinReview.Dtos;
 namespace WinReview.Controllers;
 
 
-
 [ApiController]
 [Route("Feedback/[controller]")]
 
 public class FeedbackController (IFeedbackServices services) : ControllerBase
 {
-    [Authorize]
+   
     [HttpPost("Write")]
     public async Task<IActionResult> WriteFeedback(FeedbackDto dets)
     {
@@ -43,7 +42,7 @@ public class FeedbackController (IFeedbackServices services) : ControllerBase
         
     }
     
-    [Authorize]
+    
     [HttpGet("Show")]
     public async Task<IActionResult> GetFeedbackById([FromQuery] int id, CancellationToken Ct )
     {
@@ -52,11 +51,10 @@ public class FeedbackController (IFeedbackServices services) : ControllerBase
     }
 
 
-    [Authorize]
+    
     [HttpGet("My-Feedback")]
-    public async Task<IActionResult> GetMyFeedback(CancellationToken ct)
+    public async Task<IActionResult> GetMyFeedback(CancellationToken ct, string userId )
         {
-            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
             if (userId == null)
             {

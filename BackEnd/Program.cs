@@ -48,7 +48,16 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         };
     });
 
-builder.Services.AddAuthorization();
+
+//For role based authorization 
+
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("AdminOnly", policy =>
+    {
+        policy.RequireClaim("roles", "Admin");
+    });
+});
 
 
 builder.Services.AddScoped<IFeedbackServices,FeedbackService>();
@@ -56,6 +65,8 @@ builder.Services.AddScoped<JwtServices>();
 builder.Services.AddScoped<IUserServices,UserServices>();
 builder.Services.AddScoped<IFeedbackRepository,FeedbackRepository>();
 builder.Services.AddScoped<IUserRepository,UserRepository>();
+builder.Services.AddScoped<IProjectRepository,ProjectRepository>();
+builder.Services.AddScoped<IProjectServices,ProjectServices>();
 
 
 var app = builder.Build();

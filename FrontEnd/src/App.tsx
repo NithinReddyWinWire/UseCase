@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Login from "./Components/Login";
 import HomePage from "./pages/HomePage";
 import { useMsal } from "@azure/msal-react";
+import ReviewPage from "./pages/ReviewPage";
 
 
 function App() {
@@ -17,6 +18,8 @@ function App() {
         <Route path="/" element={<Login />} />
 
         <Route path="/home" element={<HomePage />} />
+
+        <Route path="/writeReview" element={<ReviewPage/>} />
       </Routes>
     </BrowserRouter>
   );
