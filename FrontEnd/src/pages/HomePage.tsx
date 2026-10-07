@@ -1,5 +1,8 @@
 import { useNavigate } from "react-router-dom";
 import { useMsal } from "@azure/msal-react";
+import { useEffect , useState } from "react";
+import { loginRequest } from "../authConfig";
+
 
 function HomePage() {
   const navigate = useNavigate();
@@ -15,6 +18,51 @@ function HomePage() {
   const roles = (account?.idTokenClaims?.roles as string[]) || [];
   const isAdmin = roles.includes("Admin");
   
+  const [pendingReviewCount, setPendingReviewCount] = useState(0);
+
+  useEffect(() => {
+  const loadPendingReviewCount = async () => {
+    try {
+      const account = instance.getActiveAccount() ?? accounts[0];
+
+      if (!account) {
+        return;
+      }
+
+      const tokenResponse = await instance.acquireTokenSilent({
+        ...loginRequest,
+        account,
+      });
+
+      const response = await fetch(
+        "/api/Feedback/Feedback/Pending-Feedback",
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${tokenResponse.accessToken}`,
+          },
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error(
+          `Failed to load pending reviews: ${response.status}`
+        );
+      }
+
+      const data = await response.json();
+
+      setPendingReviewCount(data.length);
+    } catch (error) {
+      console.error(
+        "Failed to load pending review count:",
+        error
+      );
+    }
+  };
+
+  loadPendingReviewCount();
+}, [instance, accounts]);
   
 
   return (
@@ -182,6 +230,7 @@ function HomePage() {
           {isAdmin && (
             <button
               type="button"
+              onClick={() => navigate("/approvepage")}
               className="group flex flex-col rounded-3xl border border-[#E5E7EB] bg-white p-8 text-left shadow-sm transition hover:-translate-y-1 hover:border-[#7191B5] hover:shadow-xl hover:shadow-[#043277]/10 sm:p-9"
             >
               <div className="mb-6 flex h-14 w-14 items-center justify-center rounded-2xl bg-[#043277]">

@@ -4,6 +4,7 @@ import HomePage from "./pages/HomePage";
 import { useMsal } from "@azure/msal-react";
 import ReviewPage from "./pages/ReviewPage";
 import AuthTestPage from "./pages/AuthTestPage";
+import ApprovePage from "./pages/ApprovePage";
 
 
 function App() {
@@ -22,6 +23,7 @@ function App() {
 
         <Route path="/writeReview" element={<ReviewPage/>} />
         <Route path="/auth-test" element={<AuthTestPage />} />
+        <Route path= "/approvepage" element={<ApprovePage/>} />
       </Routes>
     </BrowserRouter>
   );

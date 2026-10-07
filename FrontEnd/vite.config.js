@@ -18,10 +18,15 @@ export default defineConfig({
         changeOrigin: true,
       },
       
-      "/Projects": {
+      "/apiAuth": {
         target: "http://localhost:5204",
         changeOrigin: true,
       },
+
+      "/Feedback":{
+        target: "http://localhost:5204",
+        changeOrigin: true,
+      }
     },
   },
 })

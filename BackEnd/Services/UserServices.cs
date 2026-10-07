@@ -7,20 +7,27 @@ using WinReview.Services.JwtServices;
 
 
 
-public class UserServices (IUserRepository _userRepositoy): IUserServices
+public class UserServices (IUserRepository _userRepository): IUserServices
 {
 
     public async Task<Users> SyncUserAsync(string objectId,string name,string email,string? role)
+
+
     {
-        return await _userRepositoy.SyncUserAsync(
+        return await _userRepository.SyncUserAsync(
             objectId,
             name,
             email,
             role
         );
     }
+
+    public async Task<Users?> GetUserByMicrosoftObjectIdAsync(string objectId)
+{
+    return await _userRepository.GetUserByMicrosoftObjectIdAsync(objectId);
+}
     public async Task<List<Users>> SearchUsersAsync(string? search)
     {
-        return await _userRepositoy.SearchUsersAsync(search);
+        return await _userRepository.SearchUsersAsync(search);
     }
 }

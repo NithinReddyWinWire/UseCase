@@ -45,20 +45,27 @@ public class UserRepository : IUserRepository
             return user;
         }
 
+    public async Task<Users?> GetUserByMicrosoftObjectIdAsync(string objectId)
+{
+    return await _DbContext.Users
+        .FirstOrDefaultAsync(u => u.MicrosoftObjectId == objectId);
+}
 
      public async Task<List<Users>> SearchUsersAsync(string? search)
+{
+
+    var query = _DbContext.Users.AsQueryable();
+
+    if (!string.IsNullOrWhiteSpace(search))
     {
-        var query = _DbContext.Users.AsQueryable();
-
-        if (!string.IsNullOrWhiteSpace(search))
-        {
-            query = query.Where(u =>
-                u.Name.Contains(search) ||
-                u.Email.Contains(search));
-        }
-
-        return await query
-            .Take(10)
-            .ToListAsync();
+        query = query.Where(u =>
+            u.Name.Contains(search) ||
+            u.Email.Contains(search));
     }
+
+    return await query
+        .OrderBy(u => u.Name)
+        .Take(10)
+        .ToListAsync();
+}
 }

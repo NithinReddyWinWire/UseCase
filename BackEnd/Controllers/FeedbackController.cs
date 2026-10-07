@@ -11,19 +11,24 @@ namespace WinReview.Controllers;
 [ApiController]
 [Route("Feedback/[controller]")]
 
-public class FeedbackController (IFeedbackServices services) : ControllerBase
+public class FeedbackController (IFeedbackServices services , IUserServices userServices) : ControllerBase
 {
    
+    [Authorize]
     [HttpPost("Write")]
     public async Task<IActionResult> WriteFeedback(FeedbackDto dets)
     {
-    
-        var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-        var userName = User.FindFirst(ClaimTypes.Name)?.Value;
+        var objectId = User.FindFirst(
+            "http://schemas.microsoft.com/identity/claims/objectidentifier"
+        )?.Value;
 
-        if (userId == null)
+        if (string.IsNullOrWhiteSpace(objectId))
             return Unauthorized();
 
+        var user = await userServices.GetUserByMicrosoftObjectIdAsync(objectId);
+
+        if (user == null)
+            return Unauthorized();
 
         var feedback = new Feedback
         {
@@ -31,15 +36,14 @@ public class FeedbackController (IFeedbackServices services) : ControllerBase
             CategoryId = dets.CategoryId,
             Rating = dets.Rating,
             Comment = dets.Comment,
-            FeedbackByUser = int.Parse(userId),
+            FeedbackByUser = user.UserId,
             CreatedAt = DateTime.Now,
             FeedbackStatus = "Pending"
         };
 
-      
         await services.CreateFeedbackAsync(feedback);
-        return Ok($"Review done by {userName} on {dets.FeedbackToUser}");
-        
+
+        return Ok();
     }
     
     
@@ -66,19 +70,41 @@ public class FeedbackController (IFeedbackServices services) : ControllerBase
             return Ok(result);
         }
 
-    [Authorize(Roles = "Admin")]
+    [Authorize(Policy = "AdminOnly")]
     [HttpPut("Approve-Feedback")]
-    public async Task<IActionResult> ApproveFeedback(int id , CancellationToken ct)
+    public async Task<IActionResult> ApproveFeedback(int id,CancellationToken ct)
     {
-        var adminID = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-        var role = User.FindFirst(ClaimTypes.Role)?.Value;
-        
-        if(adminID == null)
-            {
-                throw new KeyNotFoundException("User not found");
-            } 
+        var objectId = User.FindFirst(
+            "http://schemas.microsoft.com/identity/claims/objectidentifier"
+        )?.Value;
 
-        var result = await services.ApproveFeedback(id,int.Parse(adminID),ct);
+        if (string.IsNullOrWhiteSpace(objectId))
+        {
+            return Unauthorized();
+        }
+
+        var admin = await userServices.GetUserByMicrosoftObjectIdAsync(objectId);
+
+        if (admin == null)
+        {
+            return Unauthorized();
+        }
+
+        var result = await services.ApproveFeedback(
+            id,
+            admin.UserId,
+            ct
+        );
+
+        return Ok(result);
+    }
+
+    [Authorize]
+    [HttpGet("Pending-Feedback")]
+    public async Task<IActionResult> GetPendingFeedback(
+        CancellationToken ct)
+    {
+        var result = await services.GetPendingFeedbackAsync(ct);
 
         return Ok(result);
     }

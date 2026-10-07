@@ -5,7 +5,7 @@ using WinReview.Models;
 
 public class UserSearchDto
 {
-    public int UserId;
-    public string Name ;
-    public string  Email;
+    public int UserId { get; set; }
+    public string Name { get; set; } 
+    public string Email { get; set; } 
 }

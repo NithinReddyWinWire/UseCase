@@ -42,7 +42,10 @@ public class FeedbackService (IFeedbackRepository _feedbackRepositoy ): IFeedbac
         
     }
 
-
+    public async Task<List<Feedback>> GetPendingFeedbackAsync(CancellationToken ct)
+    {
+        return await _feedbackRepositoy.GetPendingFeedbackAsync(ct);
+    }
    public async Task<List<ShowMyFeedbackDto>> GetFeedbackForUserAsync(int userId, CancellationToken ct)
     {
         var feedbacks = await _feedbackRepositoy.GetFeedbackForUserAsync(userId, ct);

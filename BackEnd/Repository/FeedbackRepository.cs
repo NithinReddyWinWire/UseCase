@@ -40,6 +40,19 @@ public class FeedbackRepository : IFeedbackRepository
         .FirstOrDefaultAsync(f => f.FeedbackId == id,Ct);
     }
 
+
+    public async Task<List<Feedback>> GetPendingFeedbackAsync(
+    CancellationToken ct)
+    {
+        return await _DbContext.Feedbacks
+            .Where(f => f.FeedbackStatus == "Pending")
+            .Include(f => f.Project)
+            .Include(f => f.Categories)
+            .Include(f => f.FeedbackByUsersId)
+            .Include(f => f.FeedbackToUsersId)
+            .OrderBy(f => f.CreatedAt)
+            .ToListAsync(ct);
+    }
     public async Task UpdateAsync(Feedback feedback)
     {
         _DbContext.Feedbacks.Update(feedback);

@@ -11,6 +11,8 @@ public interface IFeedbackRepository
     Task<List<Feedback>> GetFeedbackForUserAsync(int userId,CancellationToken ct);
     Task SaveChangesAsync();
 
+    Task<List<Feedback>> GetPendingFeedbackAsync(CancellationToken ct);
+
     void Delete(Feedback feedback);
 
     Task UpdateAsync(Feedback feedback);

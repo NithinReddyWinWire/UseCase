@@ -57,7 +57,7 @@ export default function UserSearch({ onUserSelect,}: UserSearchProps)
 
   async function handleSearch(value: string)
    {
-    
+      console.log("SEARCH:", value);
     setSearch(value);
     setSelectedUser(null);
 
