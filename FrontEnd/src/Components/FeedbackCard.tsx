@@ -1,4 +1,5 @@
 import { Check, Eye } from "lucide-react";
+import { useMsal } from "@azure/msal-react";
 
 type FeedbackCardProps = {
   feedback: {
@@ -33,6 +34,8 @@ type FeedbackCardProps = {
   onApprove: (feedbackId: number) => void;
 
   approvingId: number | null;
+
+   canApprove: boolean;
 };
 
 export default function FeedbackCard({
@@ -40,9 +43,13 @@ export default function FeedbackCard({
   onSelect,
   onApprove,
   approvingId,
+  canApprove,
 }: FeedbackCardProps) {
   const isApproving = approvingId === feedback.feedbackId;
+  const { instance, accounts } = useMsal();
 
+  const account = instance.getActiveAccount() ?? accounts[0];
+  const currentMicrosoftObjectId = account?.localAccountId;
   return (
     <div
       onClick={() => onSelect(feedback)}
@@ -155,6 +162,8 @@ export default function FeedbackCard({
         </button>
 
         {/* Approve */}
+        {canApprove && (
+
         <button
           type="button"
           onClick={(e) => {
@@ -189,6 +198,7 @@ export default function FeedbackCard({
 
           {isApproving ? "Approving..." : "Approve"}
         </button>
+        )}
       </div>
     </div>
   );

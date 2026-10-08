@@ -56,21 +56,35 @@ public class FeedbackController (IFeedbackServices services , IUserServices user
 
 
     
+    [Authorize]
     [HttpGet("My-Feedback")]
-    public async Task<IActionResult> GetMyFeedback(CancellationToken ct, string userId )
-        {
+    public async Task<IActionResult> GetMyFeedback(CancellationToken ct)
+    {
+            var objectId = User.FindFirst(
+                "http://schemas.microsoft.com/identity/claims/objectidentifier"
+            )?.Value;
 
-            if (userId == null)
+            if (string.IsNullOrWhiteSpace(objectId))
             {
                 return Unauthorized();
             }
 
-            var result = await services.GetFeedbackForUserAsync(int.Parse(userId), ct);
+            var user = await userServices.GetUserByMicrosoftObjectIdAsync(objectId);
+
+            if (user == null)
+            {
+                return Unauthorized();
+            }
+
+            var result = await services.GetFeedbackForUserAsync(
+                user.UserId,
+                ct
+            );
 
             return Ok(result);
-        }
+    }
 
-    [Authorize(Policy = "AdminOnly")]
+    [Authorize]
     [HttpPut("Approve-Feedback")]
     public async Task<IActionResult> ApproveFeedback(int id,CancellationToken ct)
     {

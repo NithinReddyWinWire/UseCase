@@ -55,6 +55,9 @@ type Feedback = {
 
 function ApprovePage() {
   const { instance, accounts } = useMsal();
+   const account = instance.getActiveAccount() ?? accounts[0];
+
+  const currentMicrosoftObjectId = account?.localAccountId;
 
   const [feedbacks, setFeedbacks] = useState<Feedback[]>([]);
   const [loading, setLoading] = useState(true);
@@ -64,8 +67,6 @@ function ApprovePage() {
   const [selectedFeedback, setSelectedFeedback] = useState<Feedback | null>(null);
 
   const getAccessToken = async () => {
-    const account = instance.getActiveAccount() ?? accounts[0];
-
     if (!account) {
       throw new Error("No logged-in Microsoft account found.");
     }
@@ -215,7 +216,9 @@ function ApprovePage() {
        <div className="mt-6 space-y-3"> {feedbacks.map((feedback) => 
             ( <FeedbackCard key={feedback.feedbackId} feedback={feedback} 
                 approvingId={approvingId} onSelect={(feedback) => 
-                    { setSelectedFeedback(feedback); }} onApprove={handleApprove} /> ))} 
+                    { setSelectedFeedback(feedback); }} onApprove={handleApprove}
+                    canApprove={feedback.feedbackByUsersId.microsoftObjectId !== currentMicrosoftObjectId
+} /> ))} 
         </div>
       )}
     </div>

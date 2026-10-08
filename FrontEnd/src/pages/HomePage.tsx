@@ -17,6 +17,12 @@ function HomePage() {
 
   const roles = (account?.idTokenClaims?.roles as string[]) || [];
   const isAdmin = roles.includes("Admin");
+
+  const handleLogout = () => {
+  instance.logoutRedirect({
+    account,
+    postLogoutRedirectUri: "/",
+  });};
   
   const [pendingReviewCount, setPendingReviewCount] = useState(0);
 
@@ -95,15 +101,25 @@ function HomePage() {
         </span>
       </div>
 
-      <div className="flex items-center gap-3">
-        <span className="font-dm-sans text-sm text-[#666666]">
-          Hi, {firstName}
-        </span>
+      <div className="flex items-center gap-4">
+  <div className="flex items-center gap-3">
+    <span className="font-dm-sans text-sm text-[#666666]">
+      Hi, {firstName}
+    </span>
 
-        <div className="flex h-9 w-9 items-center justify-center rounded-full bg-[#DCE6F2] font-dm-sans text-sm font-medium text-[#043277] ring-2 ring-white">
-          {firstName.charAt(0).toUpperCase()}
-        </div>
-      </div>
+    <div className="flex h-9 w-9 items-center justify-center rounded-full bg-[#DCE6F2] font-dm-sans text-sm font-medium text-[#043277] ring-2 ring-white">
+      {firstName.charAt(0).toUpperCase()}
+    </div>
+  </div>
+
+  <button
+    type="button"
+    onClick={handleLogout}
+    className="rounded-lg border border-[#E5E7EB] bg-white px-4 py-2 font-dm-sans text-sm font-medium text-[#666666] transition hover:border-[#D1D5DB] hover:bg-gray-50 hover:text-[#111111]"
+  >
+    Log out
+  </button>
+</div>
     </div>
 
     {/* Main content */}
@@ -177,6 +193,7 @@ function HomePage() {
           {/* See my reviews */}
           <button
             type="button"
+            onClick={() => navigate("/my-reviews")}
             className="group flex flex-col rounded-3xl border border-[#E5E7EB] bg-white p-8 text-left shadow-sm transition hover:-translate-y-1 hover:border-[#7191B5] hover:shadow-xl hover:shadow-[#043277]/10 sm:p-9"
           >
             <div className="mb-6 flex h-14 w-14 items-center justify-center rounded-2xl bg-[#043277]">

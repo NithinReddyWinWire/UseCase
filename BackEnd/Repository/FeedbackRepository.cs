@@ -26,7 +26,7 @@ public class FeedbackRepository : IFeedbackRepository
             .Include(f => f.FeedbackByUsersId)
             .Include(f => f.FeedbackToUsersId)
             .Include(f => f.ApprovedByUserId)
-            .Where(f => f.FeedbackToUser == userId)
+            .Where(f => f.FeedbackToUser == userId && f.FeedbackStatus == "Approved")
             .ToListAsync(ct);
     }
     public async Task<Feedback?> GetAsync(int id,CancellationToken Ct)
